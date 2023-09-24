@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\DaftarAdminController;
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -25,5 +27,9 @@ Route::get('/', function () {
 });
 
 Route::group(['middleware' => 'auth'], function () {
-    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
+    Route::resources([
+        'daftar-admin' => DaftarAdminController::class
+    ]);
+    Route::post('ubah-password-admin', [DaftarAdminController::class, 'ubah_password_admin'])->name('ubah-password-admin');
 });

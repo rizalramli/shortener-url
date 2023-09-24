@@ -54,13 +54,21 @@
         </div>
         <div class="sidebar-menu">
             <ul class="menu">
-                <li class="sidebar-title">Absensi</li>
+                <li class="sidebar-title">Menu</li>
                 <li class="sidebar-item {{ Request::is('absensi/daftar-absensi') ? 'active' : '' }}">
                     <a href="" class='sidebar-link'>
-                        <i class="bi bi-person-bounding-box"></i>
-                        <span>Daftar Absensi</span>
+                        <i class="bi bi-link"></i>
+                        <span>Generate Link</span>
                     </a>
                 </li>
+                @if (Auth::user()->id == '1')
+                    <li class="sidebar-item {{ Request::is('daftar-admin') ? 'active' : '' }}">
+                        <a href="{{ route('daftar-admin.index') }}" class='sidebar-link'>
+                            <i class="bi bi-people"></i>
+                            <span>Daftar Admin</span>
+                        </a>
+                    </li>
+                @endif
 
                 <li class="sidebar-item">
                     <a href="#" class='sidebar-link' data-bs-toggle="modal" data-bs-target="#border-less">
