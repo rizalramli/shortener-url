@@ -55,8 +55,8 @@
         <div class="sidebar-menu">
             <ul class="menu">
                 <li class="sidebar-title">Menu</li>
-                <li class="sidebar-item {{ Request::is('absensi/daftar-absensi') ? 'active' : '' }}">
-                    <a href="" class='sidebar-link'>
+                <li class="sidebar-item {{ Request::is('generate-link') ? 'active' : '' }}">
+                    <a href="{{ route('generate-link.index') }}" class='sidebar-link'>
                         <i class="bi bi-link"></i>
                         <span>Generate Link</span>
                     </a>
