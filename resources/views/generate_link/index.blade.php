@@ -5,6 +5,44 @@
     <link rel="stylesheet" href="{{ asset('assets/extensions/sweetalert2/sweetalert2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/extensions/flatpickr/flatpickr.min.css') }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <style>
+        .modal-spinner {
+            position: fixed;
+            z-index: 100;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 0.5rem !important;
+        }
+
+        .spinner-alignment {
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .page-spinner {
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            position: fixed;
+            display: block;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 9999;
+        }
+
+        .page-spinner-alignment {
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+    </style>
+
+    </style>
 @endpush
 
 @section('content')
@@ -16,6 +54,11 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-12">
+                            <div class="page-spinner d-none">
+                                <div class="page-spinner-alignment">
+                                    <span class="spinner-border tx-white"></span>
+                                </div>
+                            </div>
                             <form id="form" enctype="multipart/form-data">
                                 <div class="form-group">
                                     <label for="input-url">Long URL</label>
@@ -135,6 +178,7 @@
             }
 
             if (invalidUrls.length > 0) {
+                disableLoader();
                 Swal.fire({
                     icon: 'info',
                     title: 'Informasi!',
@@ -147,6 +191,7 @@
                 var link_image_online = $('#link-image-online').val();
 
                 if (link_image_offline || link_image_online) {
+                    enableLoader();
                     form.append('url', urlsArray)
                     $.ajax({
                         url: "{{ route('generate-link.store') }}",
@@ -156,6 +201,7 @@
                         cache: false,
                         processData: false,
                         success: function(data) {
+                            disableLoader();
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Sukses Generate!',
@@ -169,6 +215,7 @@
                         }
                     })
                 } else {
+                    disableLoader();
                     Swal.fire({
                         icon: 'info',
                         title: 'Informasi!',
@@ -300,6 +347,15 @@
                 acc[key].push(obj);
                 return acc;
             }, {});
+        }
+
+        function enableLoader() {
+            $(".page-spinner").removeClass("d-none");
+            $(".page-spinner").fadeIn();
+        }
+
+        function disableLoader() {
+            $(".page-spinner").fadeOut();
         }
     </script>
 @endpush

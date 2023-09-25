@@ -20,6 +20,8 @@ class ContentController extends Controller
             return abort(404);
         }
 
+        $visitor = ShortenerUrl::updateVisitor($slug);
+
         return view('content.index', compact('data'));
     }
 }

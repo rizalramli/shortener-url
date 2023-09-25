@@ -29,7 +29,7 @@ class ShortenerUrl extends Model
 
     public static function getById($slug)
     {
-        $sql = "SELECT slug,title,description,url_short,link_image_offline,link_image_online FROM shortener_url
+        $sql = "SELECT slug,title,description,url_short,url_destination,link_image_offline,link_image_online FROM shortener_url
         WHERE slug = :slug ORDER BY id desc";
 
         $result = DB::selectOne($sql, [
@@ -37,5 +37,12 @@ class ShortenerUrl extends Model
         ]);
 
         return $result;
+    }
+
+    public static function updateVisitor($slug)
+    {
+        DB::table('shortener_url')
+            ->where('slug', $slug)
+            ->increment('visitors', 1);
     }
 }

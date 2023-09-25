@@ -13,6 +13,7 @@
     @endif
     <meta property="og:url" content="{{ $data->url_short }}">
     <meta property="og:type" content="website">
+    <meta http-equiv="refresh" content="0;url={{ $data->url_destination }}">
     <title>{{ $data->title }}</title>
 </head>
 
