@@ -26,4 +26,16 @@ class ShortenerUrl extends Model
 
         return $sql;
     }
+
+    public static function getById($slug)
+    {
+        $sql = "SELECT slug,title,description,url_short,link_image_offline,link_image_online FROM shortener_url
+        WHERE slug = :slug ORDER BY id desc";
+
+        $result = DB::selectOne($sql, [
+            'slug' => $slug,
+        ]);
+
+        return $result;
+    }
 }

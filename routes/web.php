@@ -1,8 +1,8 @@
 <?php
 
+use App\Http\Controllers\ContentController;
 use App\Http\Controllers\DaftarAdminController;
 use App\Http\Controllers\GenerateLinkController;
-use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -23,15 +23,12 @@ Auth::routes([
     'verify' => false,
 ]);
 
-Route::get('/', function () {
-    return redirect()->route('login');
-});
+Route::get('/{slug}', [ContentController::class, 'index'])->name('content');
 
 Route::group(['middleware' => 'auth'], function () {
-    Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::resources([
-        'daftar-admin' => DaftarAdminController::class,
-        'generate-link' => GenerateLinkController::class,
+        'admin/daftar-admin' => DaftarAdminController::class,
+        'admin/generate-link' => GenerateLinkController::class,
     ]);
-    Route::post('ubah-password-admin', [DaftarAdminController::class, 'ubah_password_admin'])->name('ubah-password-admin');
+    Route::post('admin/ubah-password-admin', [DaftarAdminController::class, 'ubah_password_admin'])->name('ubah-password-admin');
 });

@@ -55,14 +55,14 @@
         <div class="sidebar-menu">
             <ul class="menu">
                 <li class="sidebar-title">Menu</li>
-                <li class="sidebar-item {{ Request::is('generate-link') ? 'active' : '' }}">
+                <li class="sidebar-item {{ Request::is('admin/generate-link') ? 'active' : '' }}">
                     <a href="{{ route('generate-link.index') }}" class='sidebar-link'>
                         <i class="bi bi-link"></i>
                         <span>Generate Link</span>
                     </a>
                 </li>
                 @if (Auth::user()->id == '1')
-                    <li class="sidebar-item {{ Request::is('daftar-admin') ? 'active' : '' }}">
+                    <li class="sidebar-item {{ Request::is('admin/daftar-admin') ? 'active' : '' }}">
                         <a href="{{ route('daftar-admin.index') }}" class='sidebar-link'>
                             <i class="bi bi-people"></i>
                             <span>Daftar Admin</span>

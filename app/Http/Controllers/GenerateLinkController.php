@@ -27,6 +27,17 @@ class GenerateLinkController extends Controller
         $description = $request->description;
         $link_image_offline = null;
         $link_image_online = $request->link_image_online;
+
+        if (request()->file('link_image_offline')) {
+            $file = request()->file('link_image_offline');
+            $file_name = 'image-' . time() . '.' . $file->extension();
+
+            request()->file('link_image_offline')->move('assets/images/content', $file_name);
+
+            $link_image_offline = $file_name;
+            $link_image_online = null;
+        }
+
         $row_print = (int)$request->row_print;
 
         $data = [];
@@ -37,7 +48,7 @@ class GenerateLinkController extends Controller
                     'id_user' => Auth::id(),
                     'slug' => $slug,
                     'url_destination' => $item,
-                    'url_short' => request()->getHost() . '/' . $slug,
+                    'url_short' => request()->getSchemeAndHttpHost() . '/' . $slug,
                     'visitors' => 0,
                     'title' => $title,
                     'description' => $description,

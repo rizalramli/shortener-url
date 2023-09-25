@@ -16,7 +16,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-12">
-                            <form id="form">
+                            <form id="form" enctype="multipart/form-data">
                                 <div class="form-group">
                                     <label for="input-url">Long URL</label>
                                     <textarea id="input-url" name="url" class="form-control" rows="5"
@@ -187,6 +187,9 @@
 
             let html = '';
 
+            html +=
+                `<button class="btn mb-3 btn-primary float-right copy-all-button-global" data-placement="top" title="Copy All">Copy All</button>`;
+
             for (const urlDestination in groupedData) {
                 if (groupedData.hasOwnProperty(urlDestination)) {
                     const items = groupedData[urlDestination];
@@ -200,6 +203,7 @@
                         
                         <div class="card-body mt-3">
                             <div class="table-responsive">
+                            <button class="btn mb-3 btn-sm btn-primary float-right copy-all-button" data-placement="top" title="Copy">Copy All</button>
                                 <table class="table table-bordered">
                                     <tbody>`;
 
@@ -237,10 +241,31 @@
                     });
                 }
             });
+
+            $('.copy-all-button').click(function() {
+                const itemsToCopy = [];
+                $(this).closest('.card').find('table tbody tr td:nth-child(2)').each(function() {
+                    itemsToCopy.push($(this).text());
+                });
+
+                const textToCopy = itemsToCopy.join('\n');
+                if (copyToClipboard(textToCopy)) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Copied!',
+                        showConfirmButton: false,
+                        timer: 750
+                    });
+                }
+            });
+
+            $('.copy-all-button-global').click(function() {
+                copyAllShortUrls(data);
+            });
         }
 
         function copyToClipboard(text) {
-            const tempInput = $('<input>');
+            const tempInput = $('<textarea>'); // Use a textarea for multiline text
             $('body').append(tempInput);
             tempInput.val(text).select();
             try {
@@ -250,6 +275,19 @@
             } catch (err) {
                 tempInput.remove();
                 return false;
+            }
+        }
+
+        function copyAllShortUrls(data) {
+            const shortUrls = data.map(item => item.url_short);
+            const textToCopy = shortUrls.join('\n');
+            if (copyToClipboard(textToCopy)) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Copied All!',
+                    showConfirmButton: false,
+                    timer: 750
+                });
             }
         }
 
