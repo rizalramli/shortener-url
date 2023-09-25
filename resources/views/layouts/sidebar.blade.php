@@ -9,7 +9,7 @@
                         </div>
                     </td>
                     <td>
-                        <span><small>Shortener URL</small></span>
+                        <h5 class="mt-2">Shortener URL</h5>
                     </td>
                 </tr>
             </table>
