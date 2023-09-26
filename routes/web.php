@@ -17,13 +17,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/login', function () {
+    return view('auth.login');
+})->name('login');
+
+Route::get('/{slug}', [ContentController::class, 'index'])->name('content');
+
 Auth::routes([
     'register' => false,
     'reset' => false,
     'verify' => false,
 ]);
 
-Route::get('/{slug}', [ContentController::class, 'index'])->name('content');
 
 Route::group(['middleware' => 'auth'], function () {
     Route::resources([

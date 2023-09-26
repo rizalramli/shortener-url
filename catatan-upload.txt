@@ -1,0 +1,3 @@
+https://hendrawankevin97.medium.com/cara-menghilangkan-url-public-pada-laravel-84e9b49060aa
+
+jika upload seperti ini,maka ubah ubah function move di GenerateLinkController tambahkan public/assets/image
