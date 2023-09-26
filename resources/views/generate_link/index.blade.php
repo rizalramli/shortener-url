@@ -68,13 +68,13 @@
 
                                 <div class="form-group">
                                     <label for="input-title">Judul</label>
-                                    <input id="input-title" name="title" type="text" class="form-control" required>
+                                    <input id="input-title" name="title" type="text" class="form-control">
                                 </div>
 
                                 <div class="form-group">
                                     <label for="input-description">Deskripsi</label>
-                                    <input id="input-description" name="description" type="text" class="form-control"
-                                        required></input>
+                                    <input id="input-description" name="description" type="text"
+                                        class="form-control"></input>
                                 </div>
 
                                 <div class="row">
@@ -187,41 +187,30 @@
                         '</ul>'
                 })
             } else {
-                var link_image_offline = $('#link-image-offline').val();
-                var link_image_online = $('#link-image-online').val();
+                enableLoader();
+                form.append('url', urlsArray)
+                $.ajax({
+                    url: "{{ route('generate-link.store') }}",
+                    type: "POST",
+                    data: form,
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    success: function(data) {
+                        disableLoader();
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Sukses Generate!',
+                            showConfirmButton: false,
+                            timer: 750
+                        });
+                        printResult(data);
+                    },
+                    error: function(request, msg, error) {
+                        console.log(msg)
+                    }
+                })
 
-                if (link_image_offline || link_image_online) {
-                    enableLoader();
-                    form.append('url', urlsArray)
-                    $.ajax({
-                        url: "{{ route('generate-link.store') }}",
-                        type: "POST",
-                        data: form,
-                        contentType: false,
-                        cache: false,
-                        processData: false,
-                        success: function(data) {
-                            disableLoader();
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Sukses Generate!',
-                                showConfirmButton: false,
-                                timer: 750
-                            });
-                            printResult(data);
-                        },
-                        error: function(request, msg, error) {
-                            console.log(msg)
-                        }
-                    })
-                } else {
-                    disableLoader();
-                    Swal.fire({
-                        icon: 'info',
-                        title: 'Informasi!',
-                        text: 'Mohon isi salah satu opsi untuk URL Image.',
-                    });
-                }
 
             }
 
