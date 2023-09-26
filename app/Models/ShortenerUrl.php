@@ -14,11 +14,6 @@ class ShortenerUrl extends Model
 
     public $timestamps = true;
 
-    public $fillable = [
-        'nama',
-        'is_aktif'
-    ];
-
     public static function simpanData($data)
     {
         // Insert Data
@@ -27,21 +22,23 @@ class ShortenerUrl extends Model
         return $sql;
     }
 
-    public static function getById($slug)
+    public static function getById($subdomain, $slug)
     {
         $sql = "SELECT slug,title,description,url_short,url_destination,link_image_offline,link_image_online FROM shortener_url
-        WHERE slug = :slug ORDER BY id desc";
+        WHERE subdomain = :subdomain AND slug = :slug ORDER BY id desc";
 
         $result = DB::selectOne($sql, [
-            'slug' => $slug,
+            'subdomain' => $subdomain,
+            'slug' => $slug
         ]);
 
         return $result;
     }
 
-    public static function updateVisitor($slug)
+    public static function updateVisitor($subdomain, $slug)
     {
         DB::table('shortener_url')
+            ->where('subdomain', $subdomain)
             ->where('slug', $slug)
             ->increment('visitors', 1);
     }

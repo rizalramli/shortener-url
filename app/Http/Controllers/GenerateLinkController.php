@@ -40,15 +40,23 @@ class GenerateLinkController extends Controller
 
         $row_print = (int)$request->row_print;
 
+        if (request()->secure()) {
+            $http = 'https://';
+        } else {
+            $http = 'http://';
+        }
+
         $data = [];
         foreach ($url_destination as $item) {
             for ($i = 1; $i <= $row_print; $i++) {
+                $subdomain = Str::random(10);
                 $slug = Str::random(10);
                 $data[] = [
                     'id_user' => Auth::id(),
+                    'subdomain' => $subdomain,
                     'slug' => $slug,
                     'url_destination' => $item,
-                    'url_short' => request()->getSchemeAndHttpHost() . '/' . $slug,
+                    'url_short' => $http . $subdomain . '.' . env('APP_DOMAIN') . '/' . $slug,
                     'visitors' => 0,
                     'title' => $title,
                     'description' => $description,
