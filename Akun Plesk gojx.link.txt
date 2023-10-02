@@ -1,8 +1,0 @@
-FTP & SSH
-gojx.link_s4vitu44r7
-VH^2q8v1Tlrb_mlu
-
-Database
-db : shortener_url
-user : admin_shortener_url
-pass : Oyfb396*1
