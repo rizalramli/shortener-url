@@ -42,4 +42,16 @@ class ShortenerUrl extends Model
             ->where('slug', $slug)
             ->increment('visitors', 1);
     }
+
+    public static function getLimit($id_user)
+    {
+        $sql = "SELECT u.is_unlimited,u.limit FROM users u
+        WHERE u.id = :id_user";
+
+        $result = DB::selectOne($sql, [
+            'id_user' => $id_user,
+        ]);
+
+        return $result;
+    }
 }

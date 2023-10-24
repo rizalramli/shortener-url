@@ -23,7 +23,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'is_aktif'
+        'is_aktif',
+        'is_unlimited',
+        'limit'
     ];
 
     /**
@@ -44,7 +46,7 @@ class User extends Authenticatable
 
     public static function getData()
     {
-        $sql = "SELECT u.id,u.email,u.name as nama,u.is_aktif FROM users u";
+        $sql = "SELECT u.id,u.email,u.name as nama,u.is_aktif,u.is_unlimited,u.limit FROM users u";
 
         $sql = $sql . " WHERE u.deleted_at IS NULL";
 
@@ -64,6 +66,8 @@ class User extends Authenticatable
                 'name' => $request->nama,
                 'password' => Hash::make($request->email),
                 'is_aktif' => $request->is_aktif,
+                'is_unlimited' => $request->is_unlimited,
+                'limit' => (int) str_replace('.', '', $request->limit),
                 'created_at' => now(),
                 'updated_at' => now()
             ]);
@@ -75,6 +79,8 @@ class User extends Authenticatable
                     'email' => $request->email,
                     'name' => $request->nama,
                     'is_aktif' => $request->is_aktif,
+                    'is_unlimited' => $request->is_unlimited,
+                    'limit' => (int) str_replace('.', '', $request->limit),
                     'updated_at' => now()
                 ]);
         }
@@ -84,7 +90,7 @@ class User extends Authenticatable
 
     public static function editData($id)
     {
-        $sql = "SELECT u.id,u.email,u.name as nama,u.is_aktif FROM users u
+        $sql = "SELECT u.id,u.email,u.name as nama,u.is_aktif,u.is_unlimited,u.limit FROM users u
         WHERE u.id = :id";
 
         $result = DB::selectOne($sql, [
@@ -127,5 +133,12 @@ class User extends Authenticatable
             ->update(['password' => Hash::make($newPassword)]);
 
         return response()->json(['status' => true, 'message' => 'Password berhasil diperbarui']);
+    }
+
+    public static function updateLimit($limit, $id_user)
+    {
+        DB::table('users')
+            ->where('id', $id_user)
+            ->decrement('limit', $limit);
     }
 }

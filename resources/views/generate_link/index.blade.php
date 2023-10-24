@@ -47,6 +47,15 @@
 
 @section('content')
     <div class="page-heading">
+        <section class="section">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <h5 id="sisa-limit">Sisa Limit Anda : {!! $limit !!}</h5>
+                    </div>
+                </div>
+            </div>
+        </section>
 
         <!-- Basic Tables start -->
         <section class="section">
@@ -196,6 +205,16 @@
                     contentType: false,
                     cache: false,
                     processData: false,
+                    statusCode: {
+                        400: function(response) {
+                            disableLoader();
+                            Swal.fire({
+                                icon: 'info',
+                                title: 'Informasi!',
+                                text: response.responseJSON.message
+                            });
+                        },
+                    },
                     success: function(data) {
                         disableLoader();
                         Swal.fire({
@@ -204,7 +223,8 @@
                             showConfirmButton: false,
                             timer: 750
                         });
-                        printResult(data);
+                        printResult(data.data);
+                        $("#sisa-limit").text("Sisa Limit Anda : " + data.limit);
                     },
                     error: function(request, msg, error) {
                         console.log(msg)

@@ -31,7 +31,11 @@ class DaftarAdminController extends Controller
                     $checked = $row->is_aktif == 1 ? 'checked' : '';
                     return '<input id="checkbox' . $row->id . '" onclick="updateData(' . $row->id . ')" type="checkbox" ' . $checked . '>';
                 })
-                ->rawColumns(['is_aktif', 'aksi'])
+                ->editColumn('limit', function ($row) {
+                    $content = $row->is_unlimited == 1 ? '<span style="font-size:30px">&infin;</span>' : $row->limit;
+                    return $content;
+                })
+                ->rawColumns(['is_aktif', 'limit', 'aksi'])
                 ->toJson();
         }
         return view('daftar_admin.index');

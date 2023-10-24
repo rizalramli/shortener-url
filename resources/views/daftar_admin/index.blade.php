@@ -28,7 +28,8 @@
                                 <tr>
                                     <th class="text-center" width="20%">Email</th>
                                     <th class="text-center" width="35%">Nama</th>
-                                    <th class="text-center" width="25%">Status Aktif</th>
+                                    <th class="text-center" width="10%">Sisa Limit</th>
+                                    <th class="text-center" width="15%">Status Aktif</th>
                                     <th class="text-center" width="20%">Aksi</th>
                                 </tr>
                             </thead>
@@ -70,6 +71,22 @@
                                     <input id="input-id" type="hidden" name="id">
                                     <input id="input-is-aktif" type="hidden" name="is_aktif" value="1">
                                     <input id="input-nama" type="text" name="nama" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="input-is-unlimited">Unlimited</label>
+                                    <select name="is_unlimited" id="input-is-unlimited" class="form-control">
+                                        <option value="0">Tidak Aktif</option>
+                                        <option value="1">Aktif</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="input-limit">Limit</label>
+                                    <input id="input-limit" type="text" name="limit" value="0"
+                                        class="form-control rupiah mb-3" required />
                                 </div>
                             </div>
                         </div>
@@ -129,10 +146,16 @@
     <script src="{{ asset('assets/extensions/sweetalert2/sweetalert2.min.js') }}"></script>
     <script src="{{ asset('assets/extensions/flatpickr/flatpickr.min.js') }}"></script>
     <script src="{{ asset('assets/static/js/page/date-picker.js') }}"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
     <script>
+        const formatter = Intl.NumberFormat('id-ID');
+
         $(document).ready(function() {
             ajaxSetup()
             initTable()
+            $(".rupiah").mask('#.##0', {
+                reverse: true
+            });
         })
 
         function ajaxSetup() {
@@ -157,6 +180,10 @@
                     {
                         data: 'nama',
                         name: 'nama'
+                    },
+                    {
+                        data: 'limit',
+                        name: 'limit'
                     },
                     {
                         data: 'is_aktif',
@@ -219,6 +246,8 @@
                 $('#input-email').prop('readonly', true);
                 $('#input-nama').val(data.nama)
                 $('#input-is-aktif').val(data.is_aktif)
+                $('#input-is-unlimited').val(data.is_unlimited)
+                $('#input-limit').val(formatter.format(data.limit))
             })
         }
 

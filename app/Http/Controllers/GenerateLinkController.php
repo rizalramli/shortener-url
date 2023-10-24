@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ShortenerUrl;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -17,7 +18,13 @@ class GenerateLinkController extends Controller
 
     public function index()
     {
-        return view('generate_link.index');
+        $result = ShortenerUrl::getLimit(Auth::id());
+        if ($result->is_unlimited == 1) {
+            $limit =  '&infin;';
+        } else {
+            $limit = $result->limit;
+        }
+        return view('generate_link.index', compact('limit'));
     }
 
     public function store(Request $request)
@@ -27,6 +34,21 @@ class GenerateLinkController extends Controller
         $description = $request->description;
         $link_image_offline = null;
         $link_image_online = $request->link_image_online;
+        $row_print = (int)$request->row_print;
+
+        $result = ShortenerUrl::getLimit(Auth::id());
+        if ($result->is_unlimited != 1) {
+            $limit = $result->limit;
+            if ($row_print > $limit) {
+                return response()->json([
+                    'code' => 400,
+                    'status' => 'bad_request',
+                    'message' => 'Sisa limit anda tidak mencukupi. Silahkan hubungi Admin',
+                ], 400);
+            } else {
+                User::updateLimit($row_print, Auth::id());
+            }
+        }
 
         if (request()->file('link_image_offline')) {
             $file = request()->file('link_image_offline');
@@ -37,8 +59,6 @@ class GenerateLinkController extends Controller
             $link_image_offline = $file_name;
             $link_image_online = null;
         }
-
-        $row_print = (int)$request->row_print;
 
         if (request()->secure()) {
             $http = 'https://';
@@ -70,6 +90,16 @@ class GenerateLinkController extends Controller
 
         ShortenerUrl::simpanData($data);
 
-        return response()->json($data);
+        $result = ShortenerUrl::getLimit(Auth::id());
+        if ($result->is_unlimited == 1) {
+            $limit =  '&infin;';
+        } else {
+            $limit = $result->limit;
+        }
+
+        return response()->json([
+            'data' => $data,
+            'limit' => $limit
+        ]);
     }
 }
